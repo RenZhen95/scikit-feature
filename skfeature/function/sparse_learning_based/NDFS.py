@@ -5,7 +5,7 @@ import sklearn.cluster
 from skfeature.utility.construct_W import construct_W
 
 
-def ndfs(X, **kwargs):
+def ndfs(X, random_state=0, **kwargs):
     """
     This function implement unsupervised feature selection using nonnegative spectral analysis, i.e.,
     min_{F,W} Tr(F^T L F) + alpha*(||XW-F||_F^2 + beta*||W||_{2,1}) + gamma/2 * ||F^T F - I||_F^2
@@ -64,7 +64,7 @@ def ndfs(X, **kwargs):
         else:
             # initialize F
             n_clusters = kwargs['n_clusters']
-            F = kmeans_initialization(X, n_clusters)
+            F = kmeans_initialization(X, n_clusters, random_state=random_state)
     else:
         F = kwargs['F0']
     if 'verbose' not in kwargs:
@@ -112,7 +112,7 @@ def ndfs(X, **kwargs):
     return W
 
 
-def kmeans_initialization(X, n_clusters):
+def kmeans_initialization(X, n_clusters, random_state=0):
     """
     This function uses kmeans to initialize the pseudo label
 
@@ -130,9 +130,9 @@ def kmeans_initialization(X, n_clusters):
     """
 
     n_samples, n_features = X.shape
-    kmeans = sklearn.cluster.KMeans(n_clusters=n_clusters, init='k-means++', n_init=10, max_iter=300,
-                                    tol=0.0001, precompute_distances=True, verbose=0,
-                                    random_state=None, copy_x=True, n_jobs=1)
+    kmeans = sklearn.cluster.KMeans(n_clusters=n_clusters, init='k-means++', n_init=10,
+                                    max_iter=300, tol=0.0001, verbose=0,
+                                    random_state=random_state, copy_x=True)
     kmeans.fit(X)
     labels = kmeans.labels_
     Y = np.zeros((n_samples, n_clusters))

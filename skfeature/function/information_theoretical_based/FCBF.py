@@ -27,7 +27,6 @@ def fcbf(X, y, **kwargs):
     ---------
         Yu, Lei and Liu, Huan. "Feature Selection for High-Dimensional Data: A Fast Correlation-Based Filter Solution." ICML 2003.
     """
-
     n_samples, n_features = X.shape
     if 'delta' in kwargs.keys():
         delta = kwargs['delta']
